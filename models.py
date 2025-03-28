@@ -184,16 +184,26 @@ class User(UserMixin, JSONStorageModel):
     
     @classmethod
     def get_by_token(cls, token):
-        """Get a user by access token."""
+        """Get a user by access token with security checks."""
+        if not token or len(token) < 16:  # Basic token length check
+            logging.warning(f"Invalid token format: {token}")
+            return None
+            
         users = cls.load_all()
         for user_id, user_data in users.items():
             if user_data.get('token') == token:
+                # Check if token is expired (if we implement expiration)
+                if 'token_expires' in user_data and user_data['token_expires'] < time.time():
+                    logging.warning(f"Expired token attempt for user {user_id}")
+                    return None
+                    
                 return cls(
                     id=user_id,
                     name=user_data.get('name', ''),
                     email=user_data.get('email', ''),
                     token=token
                 )
+        logging.warning(f"Invalid token attempt: {token}")
         return None
     
     @classmethod
