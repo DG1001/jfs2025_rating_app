@@ -12,11 +12,9 @@ body {
     border-radius: 8px;
     border: none;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .card:hover {
-    transform: translateY(-5px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
@@ -134,6 +132,11 @@ body {
     .stats-card .stats-number {
         font-size: 1.5rem;
     }
+}
+
+/* Navigation/Header */
+.navbar {
+    background-color: #fcb913 !important;
 }
 
 /* Footer */
