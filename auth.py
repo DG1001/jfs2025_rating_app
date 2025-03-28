@@ -17,7 +17,7 @@ def login():
     """User login with access token."""
     if current_user.is_authenticated:
         if session.get('is_admin'):
-            return redirect('/admin/')
+            return redirect(url_for('admin.dashboard'))
         return redirect(url_for('main.index'))
     
     if request.method == 'POST':
@@ -42,7 +42,7 @@ def login():
 def admin_login():
     """Admin login with username and password."""
     if current_user.is_authenticated and session.get('is_admin'):
-        return redirect('/admin/')
+        return redirect(url_for('admin.dashboard'))
     
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
@@ -77,7 +77,10 @@ def admin_login():
 @login_required
 def logout():
     """User logout."""
+    is_admin = session.get('is_admin', False)
     logout_user()
     session.pop('is_admin', None)
     flash('Sie wurden erfolgreich abgemeldet.', 'success')
+    if is_admin:
+        return redirect(url_for('auth.admin_login'))
     return redirect(url_for('auth.login'))
