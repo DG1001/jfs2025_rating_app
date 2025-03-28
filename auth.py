@@ -68,9 +68,11 @@ def admin_login():
                 email='admin@example.com',
                 token='admin-token'
             )
-            login_user(admin_user)
+            login_user(admin_user, remember=True)
             session['is_admin'] = True
             session.permanent = True
+            # Make sure the session is saved immediately
+            session.modified = True
             flash('Admin-Login erfolgreich!', 'success')
             
             # Force a direct redirect to the admin dashboard

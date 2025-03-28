@@ -2,6 +2,7 @@ from flask import Flask, session, request, redirect, url_for, flash
 from flask_login import LoginManager, current_user
 import os
 import json
+from datetime import timedelta
 
 from config import Config
 from models import User
@@ -10,6 +11,10 @@ def create_app(config_class=Config):
     """Create and configure the Flask application."""
     app = Flask(__name__)
     app.config.from_object(config_class)
+    
+    # Configure session to be more persistent
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
     
     # Ensure instance folder exists
     os.makedirs(app.instance_path, exist_ok=True)
@@ -69,6 +74,14 @@ def create_app(config_class=Config):
     # Fix for admin login redirect issue
     @app.before_request
     def check_admin_session():
+        # Debug output to help troubleshoot
+        if request.path.startswith('/admin'):
+            print(f"Admin route accessed: {request.path}")
+            print(f"User authenticated: {current_user.is_authenticated}")
+            print(f"Is admin in session: {session.get('is_admin')}")
+            if current_user.is_authenticated:
+                print(f"Current user ID: {current_user.id}")
+        
         # Skip this check for the admin login page itself to prevent redirect loops
         if request.path.startswith('/admin') and request.path != '/admin-login':
             if not current_user.is_authenticated:
