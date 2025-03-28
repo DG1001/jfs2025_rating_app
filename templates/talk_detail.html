@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ talk.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Vorträge</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ talk.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge topic-badge">{{ talk.topicId }}</span>
+                {% if talk.languageId %}
+                <span class="badge bg-info text-dark">{{ talk.languageId }}</span>
+                {% endif %}
+                {% if talk.levelId %}
+                <span class="badge bg-warning text-dark">{{ talk.levelId }}</span>
+                {% endif %}
+                {% if talk.audienceId %}
+                <span class="badge bg-secondary">{{ talk.audienceId }}</span>
+                {% endif %}
+            </div>
+            <div>
+                <span class="text-muted">{{ talk.bookingNumber }}</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title mb-3">{{ talk.title }}</h1>
+            {% if talk.subTitle %}
+            <h5 class="card-subtitle mb-3 text-muted">{{ talk.subTitle }}</h5>
+            {% endif %}
+            
+            <div class="mb-4">
+                <h5>Abstract</h5>
+                <div class="abstract-text">
+                    {% for paragraph in talk.abstract.split('\n\n') %}
+                    <p>{{ paragraph|replace('\n', '<br>')|safe }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% if talk.keywords %}
+            <div class="mb-4">
+                <h5>Keywords</h5>
+                <div>
+                    {% for keyword in talk.keywords.split(',') %}
+                    <span class="badge bg-light text-dark border me-1 mb-1">{{ keyword.strip() }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if talk.demo == 'ja' %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>Dieser Vortrag beinhaltet eine Demo.
+            </div>
+            {% endif %}
+            
+            {% if talk.comments %}
+            <div class="mb-4">
+                <h5>Hinweise</h5>
+                <div class="comments-text">
+                    {% for paragraph in talk.comments.split('\n\n') %}
+                    <p>{{ paragraph|replace('\n', '<br>')|safe }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Speaker Information -->
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Speaker</h5>
+        </div>
+        <div class="card-body">
+            {% if speaker %}
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>{{ speaker.salutation }} {% if speaker.acadTitle %}{{ speaker.acadTitle }}{% endif %} {{ speaker.firstName }} {{ speaker.surName }}</h5>
+                    <p class="text-muted">{{ speaker.company }}</p>
+                    
+                    <div class="mb-3">
+                        {% if speaker.bio %}
+                        <p>{{ speaker.bio }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    {% if speaker.companyWebUrl %}
+                    <div>
+                        <a href="https://{{ speaker.companyWebUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-globe me-1"></i>{{ speaker.companyWebUrl }}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="speaker-image-placeholder bg-light rounded p-3 d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-person-circle" style="font-size: 5rem;"></i>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if co_speakers %}
+            <hr>
+            <h5>Co-Speaker</h5>
+            <div class="row">
+                {% for co_speaker in co_speakers %}
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6>{{ co_speaker.salutation }} {% if co_speaker.acadTitle %}{{ co_speaker.acadTitle }}{% endif %} {{ co_speaker.firstName }} {{ co_speaker.surName }}</h6>
+                            <p class="text-muted">{{ co_speaker.company }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Rating Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Bewertung</h5>
+        </div>
+        <div class="card-body">
+            <form id="rating-form" method="POST" action="{{ url_for('main.rate_talk', talk_id=talk_id) }}" class="mb-4">
+                <div class="d-flex flex-column align-items-center">
+                    <div class="rating-form mb-2">
+                        {% for i in range(max_rating, 0, -1) %}
+                        <input type="radio" name="rating" value="{{ i }}" id="rating-{{ i }}" class="rating-input" {% if user_rating == i %}checked{% endif %}>
+                        <label for="rating-{{ i }}" class="rating-label">★</label>
+                        {% endfor %}
+                    </div>
+                    <div class="rating-text">
+                        {% if user_rating %}
+                        <p class="text-success">Sie haben diesen Vortrag mit {{ user_rating }} von {{ max_rating }} Sternen bewertet.</p>
+                        {% else %}
+                        <p class="text-muted">Bewerten Sie diesen Vortrag mit 1-{{ max_rating }} Sternen.</p>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">
+                        {% if user_rating %}
+                        <i class="bi bi-star-half me-1"></i>Bewertung aktualisieren
+                        {% else %}
+                        <i class="bi bi-star me-1"></i>Bewerten
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Comments Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Kommentare</h5>
+            <span class="badge bg-secondary rounded-pill">{{ comments|length }}</span>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('main.add_comment', talk_id=talk_id) }}" class="mb-4">
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Ihr Kommentar</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-chat-left-text me-1"></i>Kommentar hinzufügen
+                </button>
+            </form>
+            
+            <hr>
+            
+            {% if comments %}
+            <div class="comments-list">
+                {% for comment in comments|sort(attribute='timestamp', reverse=true) %}
+                <div class="comment-box">
+                    <div class="comment-header">
+                        <span class="comment-author">{{ comment.user_name }}</span>
+                        <span class="comment-time">
+                            {{ (comment.timestamp|int)|strftime('%d.%m.%Y, %H:%M') }}
+                        </span>
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.text }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-chat-left me-2"></i>Noch keine Kommentare vorhanden.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+    .rating-form {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        font-size: 2rem;
+    }
+    
+    .rating-input {
+        display: none;
+    }
+    
+    .rating-label {
+        cursor: pointer;
+        color: #ddd;
+        margin: 0 2px;
+    }
+    
+    .rating-label:hover,
+    .rating-label:hover ~ .rating-label,
+    .rating-input:checked ~ .rating-label {
+        color: #ffc107;
+    }
+    
+    .abstract-text p {
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}

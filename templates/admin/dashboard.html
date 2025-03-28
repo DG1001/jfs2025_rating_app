@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card stats-card bg-primary text-white">
+                <div class="card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="stats-number">{{ user_count }}</div>
+                    <div class="stats-label">Benutzer</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stats-card bg-success text-white">
+                <div class="card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-mic-fill"></i>
+                    </div>
+                    <div class="stats-number">{{ talk_count }}</div>
+                    <div class="stats-label">Vorträge</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stats-card bg-info text-white">
+                <div class="card-body">
+                    <div class="stats-icon">
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div class="stats-number">
+                        {% set rated_talks = sorted_talks|selectattr('2', '>', 0)|list %}
+                        {{ rated_talks|length }}
+                    </div>
+                    <div class="stats-label">Bewertete Vorträge</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Vorträge nach Bewertung</h5>
+            <a href="{{ url_for('admin.export_ratings') }}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-download me-1"></i>Export CSV
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Titel</th>
+                            <th>Topic</th>
+                            <th>Booking Nr.</th>
+                            <th>Durchschnitt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for talk_id, talk, avg_rating in sorted_talks %}
+                        <tr>
+                            <td>{{ talk.title }}</td>
+                            <td>
+                                <span class="badge bg-secondary">{{ talk.topicId }}</span>
+                            </td>
+                            <td>{{ talk.bookingNumber }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="rating-stars me-2">
+                                        {% for i in range(max_rating) %}
+                                            {% if i < avg_rating|int %}
+                                                <i class="bi bi-star-fill"></i>
+                                            {% elif i < avg_rating and i >= avg_rating|int %}
+                                                <i class="bi bi-star-half"></i>
+                                            {% else %}
+                                                <i class="bi bi-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <span class="fw-bold">{{ avg_rating|round(2) }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-between mb-3">
+        <h2>Benutzer</h2>
+        <a href="{{ url_for('admin.manage_users') }}" class="btn btn-primary">
+            <i class="bi bi-people me-1"></i>Benutzer verwalten
+        </a>
+    </div>
+    
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>E-Mail</th>
+                            <th>Token</th>
+                            <th>Erstellt am</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_id, user_data in users.items() %}
+                        <tr>
+                            <td>{{ user_data.name }}</td>
+                            <td>{{ user_data.email }}</td>
+                            <td>
+                                <code>{{ user_data.token }}</code>
+                            </td>
+                            <td>{{ user_data.created_at|default('') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

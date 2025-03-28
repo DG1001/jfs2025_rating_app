@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Benutzer verwalten{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Benutzer verwalten</h1>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Neuen Benutzer hinzufügen</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('admin.add_user') }}" class="row g-3">
+                <div class="col-md-5">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-5">
+                    <label for="email" class="form-label">E-Mail</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-person-plus me-1"></i>Hinzufügen
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card shadow">
+        <div class="card-header">
+            <h5 class="mb-0">Benutzer</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>E-Mail</th>
+                            <th>Token</th>
+                            <th>Erstellt am</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user_id, user_data in users.items() %}
+                        <tr>
+                            <td>{{ user_data.name }}</td>
+                            <td>{{ user_data.email }}</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" value="{{ user_data.token }}" readonly>
+                                    <button class="btn btn-outline-secondary btn-sm copy-btn" type="button" 
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="In Zwischenablage kopieren"
+                                            onclick="navigator.clipboard.writeText('{{ user_data.token }}')">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>{{ user_data.created_at|default('') }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <form method="POST" action="{{ url_for('admin.regenerate_token', user_id=user_id) }}" class="me-1">
+                                        <button type="submit" class="btn btn-sm btn-warning" 
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Neues Token generieren">
+                                            <i class="bi bi-key"></i>
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('admin.delete_user', user_id=user_id) }}" 
+                                          onsubmit="return confirm('Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?');">
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Benutzer löschen">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Vorträge{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Vorträge - Java Forum Stuttgart 2025</h1>
+    
+    <!-- Filter and Search -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form id="filter-form" method="GET" action="{{ url_for('main.index') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label for="topic-filter" class="form-label">Nach Topic filtern</label>
+                    <select class="form-select" id="topic-filter" name="topic">
+                        <option value="">Alle Topics</option>
+                        {% for topic in topics %}
+                        <option value="{{ topic }}" {% if current_topic == topic %}selected{% endif %}>
+                            {{ topic }} ({{ topic_counts[topic] }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="keyword-search" class="form-label">Suche nach Keywords</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="keyword-search" name="keyword" 
+                               placeholder="Suchbegriff eingeben..." value="{{ current_keyword }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-x-circle me-1"></i>Zurücksetzen
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-primary rounded-pill">{{ filtered_count }}</span> Vorträge angezeigt
+                    {% if filtered_count != total_talks %}
+                    (von insgesamt {{ total_talks }})
+                    {% endif %}
+                </div>
+                <div>
+                    {% if current_topic %}
+                    <span class="badge bg-secondary">Topic: {{ current_topic }}</span>
+                    {% endif %}
+                    {% if current_keyword %}
+                    <span class="badge bg-info text-dark">Suche: {{ current_keyword }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Talks Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+        {% for talk_id, talk in talks.items() %}
+        <div class="col">
+            <div class="card talk-card h-100 shadow-sm">
+                <div class="card-header">
+                    <span class="badge topic-badge">{{ talk.topicId }}</span>
+                    {% if talk.languageId %}
+                    <span class="badge bg-info text-dark">{{ talk.languageId }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ talk.title }}</h5>
+                    <p class="card-text text-truncate">
+                        {{ talk.abstract|striptags|truncate(100) }}
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="rating-stars {% if talk_id not in user_ratings %}unrated{% endif %}">
+                            {% if talk_id in user_ratings %}
+                                {% for i in range(user_ratings[talk_id]) %}
+                                <i class="bi bi-star-fill"></i>
+                                {% endfor %}
+                                {% for i in range(user_ratings[talk_id], 5) %}
+                                <i class="bi bi-star"></i>
+                                {% endfor %}
+                            {% else %}
+                                <i class="bi bi-star"></i>
+                                <i class="bi bi-star"></i>
+                                <i class="bi bi-star"></i>
+                                <i class="bi bi-star"></i>
+                                <i class="bi bi-star"></i>
+                                <small class="text-muted ms-1">Nicht bewertet</small>
+                            {% endif %}
+                        </div>
+                        <a href="{{ url_for('main.talk_detail', talk_id=talk_id) }}" class="btn btn-sm btn-primary">
+                            Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>Keine Vorträge gefunden, die den Filterkriterien entsprechen.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
