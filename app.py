@@ -82,9 +82,17 @@ def create_app(config_class=Config):
             if current_user.is_authenticated:
                 print(f"Current user ID: {current_user.id}")
         
-        # Skip this check for the admin login page itself to prevent redirect loops
-        if request.path.startswith('/admin') and request.path != '/admin-login':
+        # Special case for admin login page
+        if request.path == '/admin-login':
+            # If we're already authenticated as admin, redirect to dashboard
+            if current_user.is_authenticated and session.get('is_admin') and current_user.id == 'admin':
+                return redirect(url_for('admin.dashboard'))
+            return None
+        
+        # For all other admin routes
+        if request.path.startswith('/admin'):
             if not current_user.is_authenticated:
+                session.pop('is_admin', None)  # Clear any stale admin session
                 flash('Bitte melden Sie sich als Administrator an.', 'warning')
                 return redirect(url_for('auth.admin_login'))
             

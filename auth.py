@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 import time
 import os
+import json
 from models import User
 
 auth = Blueprint('auth', __name__)
@@ -61,18 +62,44 @@ def admin_login():
             if current_user.is_authenticated:
                 logout_user()
                 
-            # Create admin user
+            # Create admin user - make sure it's properly saved in the User storage
             admin_user = User(
                 id='admin',
                 name='Administrator',
                 email='admin@example.com',
                 token='admin-token'
             )
+            
+            # Save admin user to the users file to ensure it exists
+            users = {}
+            try:
+                with open(current_app.config['USERS_FILE'], 'r') as f:
+                    users = json.load(f)
+            except Exception as e:
+                print(f"Error loading users: {e}")
+                
+            # Add or update admin user
+            users['admin'] = {
+                'name': 'Administrator',
+                'email': 'admin@example.com',
+                'token': 'admin-token'
+            }
+            
+            # Save updated users
+            try:
+                with open(current_app.config['USERS_FILE'], 'w') as f:
+                    json.dump(users, f, indent=4)
+            except Exception as e:
+                print(f"Error saving admin user: {e}")
+            
+            # Now login the user
             login_user(admin_user, remember=True)
             session['is_admin'] = True
             session.permanent = True
             # Make sure the session is saved immediately
             session.modified = True
+            
+            print(f"Admin login successful. User authenticated: {current_user.is_authenticated}")
             flash('Admin-Login erfolgreich!', 'success')
             
             # Force a direct redirect to the admin dashboard
