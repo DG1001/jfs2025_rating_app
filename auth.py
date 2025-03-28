@@ -41,7 +41,9 @@ def login():
 @auth.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
     """Admin login with username and password."""
-    if current_user.is_authenticated and session.get('is_admin'):
+    # Prevent redirect loop - if we're already on admin-login page, don't check admin status
+    if request.path == '/admin-login' and current_user.is_authenticated and session.get('is_admin'):
+        # We're already an admin and on the admin login page, go directly to dashboard
         return redirect(url_for('admin.dashboard'))
     
     if request.method == 'POST':

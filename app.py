@@ -69,7 +69,8 @@ def create_app(config_class=Config):
     # Fix for admin login redirect issue
     @app.before_request
     def check_admin_session():
-        if request.path.startswith('/admin'):
+        # Skip this check for the admin login page itself to prevent redirect loops
+        if request.path.startswith('/admin') and request.path != '/admin-login':
             if not current_user.is_authenticated:
                 flash('Bitte melden Sie sich als Administrator an.', 'warning')
                 return redirect(url_for('auth.admin_login'))
