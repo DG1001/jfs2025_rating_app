@@ -65,9 +65,9 @@ def admin_login():
             login_user(admin_user)
             session['is_admin'] = True
             flash('Admin-Login erfolgreich!', 'success')
-                        
+            
             # Force a direct redirect to the admin dashboard
-            return redirect('/admin/')
+            return redirect(url_for('admin.dashboard'))
         
         flash('Ungültiger Benutzername oder Passwort.', 'danger')
     

@@ -11,13 +11,10 @@ from auth import generate_token, User
 admin = Blueprint('admin', __name__)
 
 @admin.route('/')
+@login_required
 def dashboard():
     """Admin dashboard."""
     # Check admin status here instead
-
-    if not current_user.is_authenticated:
-        flash('Bitte melden Sie sich an.', 'warning')
-        return redirect(url_for('auth.login'))
         
     if not session.get('is_admin'):
         flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
