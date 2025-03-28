@@ -12,7 +12,7 @@ Eine Flask-basierte Anwendung zur Verwaltung und Bewertung von Vorträgen für d
 - Admin-Oberfläche zur Benutzerverwaltung und Bewertungsübersicht
 - Access-Token-System für Benutzerauthentifizierung
 - JSON-basierte Datenspeicherung ohne Datenbankabhängigkeit
-- Logging-System für Bewertungen mit Wiederherstellungsfunktion
+
 
 ## Installation
 
@@ -52,6 +52,7 @@ flask run --host=0.0.0.0 --port=5000
 - URL: `/login`
 - Benutzer benötigen ein Access-Token, das vom Administrator generiert wird
 - Tokens werden über die Admin-Oberfläche unter "Benutzer verwalten" erstellt
+- Direkter Zugang über Token in URL möglich: `/login?token=<token>`
 
 ## Datenstruktur
 
@@ -70,14 +71,6 @@ Ausführen der Tests:
 ```bash
 python tests.py
 ```
-
-## Wiederherstellung von Bewertungen
-
-Im Falle eines Datenverlusts können Bewertungen aus der Log-Datei wiederhergestellt werden:
-
-1. Als Administrator einloggen
-2. Zur Admin-Oberfläche navigieren
-3. "Bewertungen wiederherstellen" auswählen
 
 ## Technische Details
 
