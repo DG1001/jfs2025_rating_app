@@ -68,16 +68,32 @@ class Talk(JSONStorageModel):
         return {k: v for k, v in talks.items() if v.get('topicId') == topic_id}
     
     @classmethod
-    def search(cls, keyword):
-        """Search talks by keyword in title, abstract, or keywords."""
+    def search(cls, keyword=None, abstract=None):
+        """Search talks by keyword in title/abstract/keywords and/or abstract text."""
         talks = cls.load_all()
-        keyword = keyword.lower()
-        return {
-            k: v for k, v in talks.items() 
-            if (keyword in v.get('title', '').lower() or 
-                keyword in v.get('abstract', '').lower() or 
-                keyword in v.get('keywords', '').lower())
-        }
+        
+        # Prepare search terms
+        keyword = keyword.lower() if keyword else None
+        abstract = abstract.lower() if abstract else None
+        
+        filtered = {}
+        for talk_id, talk in talks.items():
+            matches = True
+            
+            # Keyword search (title, abstract or keywords)
+            if keyword:
+                matches = (keyword in talk.get('title', '').lower() or 
+                         keyword in talk.get('abstract', '').lower() or 
+                         keyword in talk.get('keywords', '').lower())
+            
+            # Additional abstract search if keyword matched or no keyword search
+            if matches and abstract:
+                matches = abstract in talk.get('abstract', '').lower()
+            
+            if matches:
+                filtered[talk_id] = talk
+        
+        return filtered
     
     @classmethod
     def get_all_topics(cls):
