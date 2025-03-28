@@ -15,12 +15,24 @@ def generate_token(length=16):
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    """User login with access token."""
+    """User login with access token via form or URL."""
     if current_user.is_authenticated:
         if session.get('is_admin'):
             return redirect(url_for('admin.dashboard'))
         return redirect(url_for('main.index'))
     
+    # Check for token in URL first
+    token = request.args.get('token')
+    if token:
+        user = User.get_by_token(token.strip())
+        if user:
+            login_user(user)
+            flash(f'Willkommen, {user.name}!', 'success')
+            return redirect(url_for('main.index'))
+        flash('Ungültiges Access-Token.', 'danger')
+        return redirect(url_for('auth.login'))
+    
+    # Normal form login
     if request.method == 'POST':
         token = request.form.get('token', '').strip()
         
@@ -28,7 +40,6 @@ def login():
             flash('Bitte geben Sie ein Access-Token ein.', 'danger')
             return render_template('auth/login.html')
         
-        # Find user with matching token
         user = User.get_by_token(token)
         if user:
             login_user(user)
