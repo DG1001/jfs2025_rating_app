@@ -120,3 +120,4 @@ temp/
 data/
 
 instance/
+.aider*
