@@ -160,6 +160,49 @@
         </div>
     </div>
     
+    <!-- All Ratings Section -->
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Alle Bewertungen</h5>
+            <span class="badge bg-secondary rounded-pill">{{ all_ratings|length }}</span>
+        </div>
+        <div class="card-body">
+            {% if all_ratings %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nutzer</th>
+                            <th>Bewertung</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rating in all_ratings %}
+                        <tr>
+                            <td>{{ rating.user_name }}</td>
+                            <td>
+                                {% for i in range(1, max_rating + 1) %}
+                                    {% if i <= rating.rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                                ({{ rating.rating }})
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-star me-2"></i>Noch keine Bewertungen vorhanden.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
     <!-- Comments Section -->
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">

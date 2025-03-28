@@ -95,6 +95,16 @@ def talk_detail(talk_id):
     # Get comments for this talk
     comments = Comment.get_for_talk(talk_id)
     
+    # Get all ratings for this talk with user info
+    all_ratings = []
+    ratings_data = Rating.get_for_talk(talk_id)
+    for user_id, rating in ratings_data.items():
+        user = User.get_by_id(user_id)
+        all_ratings.append({
+            'user_name': user.name if user else 'Unknown',
+            'rating': rating
+        })
+    
     return render_template('talk_detail.html', 
                         talk=talk,
                         talk_id=talk_id,
@@ -102,7 +112,8 @@ def talk_detail(talk_id):
                         co_speakers=co_speakers,
                         user_rating=user_rating,
                         max_rating=current_app.config['MAX_RATING'],
-                        comments=comments)
+                        comments=comments,
+                        all_ratings=all_ratings)
 
 @main.route('/rate/<talk_id>', methods=['POST'])
 @login_required
