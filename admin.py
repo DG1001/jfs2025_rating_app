@@ -11,14 +11,9 @@ from auth import generate_token, User
 admin = Blueprint('admin', __name__)
 
 @admin.route('/')
-@login_required
 def dashboard():
     """Admin dashboard."""
-    # Check admin status here instead
-        
-    if not session.get('is_admin'):
-        flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
-        return redirect(url_for('auth.admin_login'))
+    # Admin check is now handled by the before_request in app.py
     
     # Load users data
     users = {}
@@ -72,13 +67,9 @@ def dashboard():
                           max_rating=current_app.config['MAX_RATING'])
 
 @admin.route('/users')
-@login_required
 def manage_users():
     """User management page."""
-    # Check admin status here
-    if not session.get('is_admin'):
-        flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
-        return redirect(url_for('auth.admin_login'))
+    # Admin check is now handled by the before_request in app.py
     
     # Load users data
     users = {}
@@ -91,13 +82,9 @@ def manage_users():
     return render_template('admin/users.html', users=users)
 
 @admin.route('/users/add', methods=['POST'])
-@login_required
 def add_user():
     """Add a new user."""
-    # Check admin status here
-    if not session.get('is_admin'):
-        flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
-        return redirect(url_for('auth.admin_login'))
+    # Admin check is now handled by the before_request in app.py
     
     name = request.form.get('name', '').strip()
     email = request.form.get('email', '').strip()
@@ -145,13 +132,9 @@ def add_user():
     return redirect(url_for('admin.manage_users'))
 
 @admin.route('/users/regenerate-token/<user_id>', methods=['POST'])
-@login_required
 def regenerate_token(user_id):
     """Regenerate access token for a user."""
-    # Check admin status here
-    if not session.get('is_admin'):
-        flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
-        return redirect(url_for('auth.admin_login'))
+    # Admin check is now handled by the before_request in app.py
     
     # Load current users
     users = {}
@@ -183,13 +166,9 @@ def regenerate_token(user_id):
     return redirect(url_for('admin.manage_users'))
 
 @admin.route('/users/delete/<user_id>', methods=['POST'])
-@login_required
 def delete_user(user_id):
     """Delete a user."""
-    # Check admin status here
-    if not session.get('is_admin'):
-        flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
-        return redirect(url_for('auth.admin_login'))
+    # Admin check is now handled by the before_request in app.py
     
     # Load current users
     users = {}
@@ -234,13 +213,9 @@ def delete_user(user_id):
     return redirect(url_for('admin.manage_users'))
 
 @admin.route('/export-ratings')
-@login_required
 def export_ratings():
     """Export ratings as CSV file."""
-    # Check admin status here
-    if not session.get('is_admin'):
-        flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
-        return redirect(url_for('auth.admin_login'))
+    # Admin check is now handled by the before_request in app.py
     
     # Load talks data
     talks = {}

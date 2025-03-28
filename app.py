@@ -69,8 +69,15 @@ def create_app(config_class=Config):
     # Fix for admin login redirect issue
     @app.before_request
     def check_admin_session():
-        if current_user.is_authenticated and session.get('is_admin') and request.path.startswith('/admin'):
-            # Ensure the user is still authenticated and has admin privileges
+        if request.path.startswith('/admin'):
+            if not current_user.is_authenticated:
+                flash('Bitte melden Sie sich als Administrator an.', 'warning')
+                return redirect(url_for('auth.admin_login'))
+            
+            if not session.get('is_admin'):
+                flash('Zugriff verweigert. Bitte melden Sie sich als Administrator an.', 'danger')
+                return redirect(url_for('auth.admin_login'))
+            
             if current_user.id != 'admin':
                 session.pop('is_admin', None)
                 flash('Admin-Sitzung abgelaufen. Bitte melden Sie sich erneut an.', 'warning')

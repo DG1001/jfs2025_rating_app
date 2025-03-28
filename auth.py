@@ -55,6 +55,10 @@ def admin_login():
         # Check against environment variables
         if (username == current_app.config['ADMIN_USERNAME'] and 
             password == current_app.config['ADMIN_PASSWORD']):
+            # Logout any existing user first
+            if current_user.is_authenticated:
+                logout_user()
+                
             # Create admin user
             admin_user = User(
                 id='admin',
@@ -64,6 +68,7 @@ def admin_login():
             )
             login_user(admin_user)
             session['is_admin'] = True
+            session.permanent = True
             flash('Admin-Login erfolgreich!', 'success')
             
             # Force a direct redirect to the admin dashboard
