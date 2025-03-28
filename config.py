@@ -12,12 +12,15 @@ class Config:
     ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME') or 'admin'
     ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD') or 'admin'
     
+    # Data directory
+    DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+    
     # File paths for data storage
-    TALKS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'talks.json')
-    SPEAKERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'speakers.json')
-    USERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'users.json')
-    RATINGS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'ratings.json')
-    COMMENTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'comments.json')
+    TALKS_FILE = os.path.join(DATA_DIR, 'talks.json')
+    SPEAKERS_FILE = os.path.join(DATA_DIR, 'speakers.json')
+    USERS_FILE = os.path.join(DATA_DIR, 'users.json')
+    RATINGS_FILE = os.path.join(DATA_DIR, 'ratings.json')
+    COMMENTS_FILE = os.path.join(DATA_DIR, 'comments.json')
     
     # Logging configuration
     LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
