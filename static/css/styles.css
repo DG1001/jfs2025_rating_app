@@ -118,6 +118,22 @@ body {
     color: #6c757d;
 }
 
+/* Statistik-Karten Farben */
+.stats-card-primary {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+}
+
+.stats-card-success {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.stats-card-warning {
+    background-color: #fff8e1;
+    border-left: 4px solid #ffc107;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .container {
