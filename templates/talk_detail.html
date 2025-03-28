@@ -160,7 +160,8 @@
         </div>
     </div>
     
-    <!-- All Ratings Section -->
+    <!-- All Ratings Section - Only shown if user has rated -->
+    {% if user_rating %}
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Alle Bewertungen</h5>
@@ -202,6 +203,7 @@
             {% endif %}
         </div>
     </div>
+    {% endif %}
 
     <!-- Comments Section -->
     <div class="card shadow mb-4">
