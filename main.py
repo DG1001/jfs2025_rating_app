@@ -37,9 +37,13 @@ def index():
     # Count talks per topic
     topic_counts = Talk.count_by_topic()
     
-    # Get filter parameters
-    topic_filter = request.args.get('topic', '')
-    keyword_filter = request.args.get('keyword', '')
+    # Get filter parameters from request or session
+    topic_filter = request.args.get('topic', session.get('topic_filter', ''))
+    keyword_filter = request.args.get('keyword', session.get('keyword_filter', ''))
+    
+    # Store filters in session
+    session['topic_filter'] = topic_filter
+    session['keyword_filter'] = keyword_filter
     
     # Filter talks based on parameters
     filtered_talks = talks
@@ -59,8 +63,8 @@ def index():
                         topic_counts=topic_counts,
                         total_talks=len(talks),
                         filtered_count=len(filtered_talks),
-                        current_topic=topic_filter,
-                        current_keyword=keyword_filter)
+                        current_topic=session['topic_filter'],
+                        current_keyword=session['keyword_filter'])
 
 @main.route('/talk/<talk_id>')
 @login_required
