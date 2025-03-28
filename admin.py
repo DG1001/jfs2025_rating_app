@@ -14,6 +14,7 @@ admin = Blueprint('admin', __name__)
 def dashboard():
     """Admin dashboard."""
     # Check admin status here instead
+
     if not current_user.is_authenticated:
         flash('Bitte melden Sie sich an.', 'warning')
         return redirect(url_for('auth.login'))
