@@ -10,7 +10,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <form id="filter-form" method="GET" action="{{ url_for('main.index') }}" class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label for="topic-filter" class="form-label">Nach Topic filtern</label>
                     <select class="form-select" id="topic-filter" name="topic">
                         <option value="">Alle Topics</option>
@@ -21,14 +21,11 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <label for="keyword-search" class="form-label">Suche nach Keywords bzw. im Abstract</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="keyword-search" name="keyword" 
                                placeholder="Suchbegriff eingeben..." value="{{ current_keyword }}">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -124,4 +121,28 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the filter elements
+        const topicFilter = document.getElementById('topic-filter');
+        const keywordSearch = document.getElementById('keyword-search');
+        const ratedFilter = document.getElementById('rated-filter');
+        const filterForm = document.getElementById('filter-form');
+
+        // Function to submit the form
+        function submitForm() {
+            filterForm.submit();
+        }
+
+        // Add event listeners for immediate submission
+        topicFilter.addEventListener('change', submitForm);
+        keywordSearch.addEventListener('input', function() {
+            // Optional: Add a small delay to avoid submitting on every keystroke
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(submitForm, 300);
+        });
+        ratedFilter.addEventListener('change', submitForm);
+    });
+</script>
 {% endblock %}
