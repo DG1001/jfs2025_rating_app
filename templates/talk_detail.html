@@ -38,8 +38,8 @@
             <div class="mb-4">
                 <h5>Abstract</h5>
                 <div class="abstract-text">
-                    {% for paragraph in talk.abstract.split('\n\n') %}
-                    <p>{{ paragraph|replace('\n', '<br>')|safe }}</p>
+                    {% for paragraph in talk.abstract.split('\\n\\n') %}
+                    <p>{{ paragraph|replace('\\n', '<br>')|safe }}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -65,8 +65,8 @@
             <div class="mb-4">
                 <h5>Hinweise</h5>
                 <div class="comments-text">
-                    {% for paragraph in talk.comments.split('\n\n') %}
-                    <p>{{ paragraph|replace('\n', '<br>')|safe }}</p>
+                    {% for paragraph in talk.comments.split('\\n\\n') %}
+                    <p>{{ paragraph|replace('\\n', '<br>')|safe }}</p>
                     {% endfor %}
                 </div>
             </div>
