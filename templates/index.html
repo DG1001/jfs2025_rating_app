@@ -51,9 +51,6 @@
                 <div>
                     <span class="badge bg-success rounded-pill">{{ user_ratings|length }}</span>/<span class="badge bg-primary rounded-pill">{{ total_talks }}</span> bewertet •
                     <span class="badge bg-primary rounded-pill">{{ filtered_count }}</span> Vorträge angezeigt
-                    {% if filtered_count != total_talks %}
-                    (von insgesamt {{ total_talks }})
-                    {% endif %}
                 </div>
                 <div>
                     {% if current_topic %}
