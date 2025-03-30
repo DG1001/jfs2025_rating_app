@@ -81,6 +81,28 @@
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     
     {% block modals %}{% endblock %}
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    <script>
+        // Character counter for comment field
+        document.addEventListener('DOMContentLoaded', function() {
+            const commentField = document.getElementById('comment');
+            const charCount = document.getElementById('char-count');
+        
+            if (commentField && charCount) {
+                commentField.addEventListener('input', function() {
+                    const remaining = this.value.length;
+                    charCount.textContent = remaining;
+                
+                    // Change color when approaching limit
+                    if (remaining > 180) {
+                        charCount.classList.add('text-danger');
+                    } else {
+                        charCount.classList.remove('text-danger');
+                    }
+                });
+            }
+        });
+    </script>
+    {% endblock %}
 </body>
 </html>
