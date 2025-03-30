@@ -22,6 +22,9 @@ def create_app(config_class=Config):
     # Ensure data folder exists
     os.makedirs(app.config['DATA_DIR'], exist_ok=True)
     
+    # Ensure log directory exists
+    os.makedirs(app.config['LOG_DIR'], exist_ok=True)
+    
     # Create empty data files if they don't exist
     if not os.path.exists(app.config['USERS_FILE']):
         with open(app.config['USERS_FILE'], 'w') as f:

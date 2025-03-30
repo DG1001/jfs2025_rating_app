@@ -12,6 +12,12 @@ def setup_logging():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
     
+    # Create an empty log file if it doesn't exist
+    log_file = current_app.config['RATING_LOG_FILE']
+    if not os.path.exists(log_file):
+        open(log_file, 'a').close()
+        print(f"Created log file: {log_file}")
+    
     # Setup rating logger
     rating_logger = logging.getLogger('rating_logger')
     rating_logger.setLevel(logging.INFO)
@@ -21,22 +27,33 @@ def setup_logging():
         rating_logger.removeHandler(handler)
     
     # Add file handler
-    rating_handler = logging.FileHandler(current_app.config['RATING_LOG_FILE'])
+    rating_handler = logging.FileHandler(log_file)
     formatter = logging.Formatter('%(asctime)s - %(message)s')
     rating_handler.setFormatter(formatter)
     rating_logger.addHandler(rating_handler)
     
-    # Ensure propagation is enabled
-    rating_logger.propagate = True
+    # Disable propagation to avoid duplicate logs
+    rating_logger.propagate = False
 
 def log_rating(user_id, talk_id, rating, old_rating=None):
     """Log a rating action."""
+    # Get the logger
     rating_logger = logging.getLogger('rating_logger')
     
+    # Ensure the logger has at least one handler
+    if not rating_logger.handlers:
+        setup_logging()
+    
+    # Log the rating action
     if old_rating:
-        rating_logger.info(f'User {user_id} changed rating for talk {talk_id} from {old_rating} to {rating}')
+        message = f'User {user_id} changed rating for talk {talk_id} from {old_rating} to {rating}'
     else:
-        rating_logger.info(f'User {user_id} rated talk {talk_id} with {rating}')
+        message = f'User {user_id} rated talk {talk_id} with {rating}'
+    
+    rating_logger.info(message)
+    
+    # Debug: print to console as well
+    print(f"RATING LOG: {message}")
 
 def recover_ratings_from_log():
     """Recover ratings from log file in case of data loss."""

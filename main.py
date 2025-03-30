@@ -176,7 +176,8 @@ def recover_ratings():
 def init_app(app):
     """Initialize the main blueprint with the app."""
     # Setup logging
-    setup_logging()
+    with app.app_context():
+        setup_logging()
     
     # Register the blueprint
     app.register_blueprint(main)
