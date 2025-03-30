@@ -4,11 +4,13 @@ Eine Flask-basierte Anwendung zur Verwaltung und Bewertung von Vorträgen für d
 
 ## Funktionen
 
-- Modernes, responsives Design
+- Modernes, responsives Design mit fixierter Navigation
 - Übersicht aller Vorträge mit Filterfunktionen
 - Detailansicht mit vollständigem Abstract und Speaker-Informationen
-- Bewertungssystem mit 1-5 Sternen
-- Kommentarfunktion für Vorträge
+- Bewertungssystem mit 1-5 Sternen (Bewertung durch Klick auf die Sterne)
+- Kommentarfunktion für Vorträge (max. 200 Zeichen)
+- "Schütteln für Zufallsvortrag" Funktion auf Mobilgeräten
+- Fortschrittsanzeige (X/Y Vorträge bewertet)
 - Admin-Oberfläche zur Benutzerverwaltung und Bewertungsübersicht
 - Access-Token-System für Benutzerauthentifizierung
 - JSON-basierte Datenspeicherung ohne Datenbankabhängigkeit
@@ -53,6 +55,11 @@ flask run --host=0.0.0.0 --port=5000
 - Benutzer benötigen ein Access-Token, das vom Administrator generiert wird
 - Tokens werden über die Admin-Oberfläche unter "Benutzer verwalten" erstellt
 - Direkter Zugang über Token in URL möglich: `/login?token=<token>`
+
+### Mobile Funktionen
+
+- Schütteln des Mobilgeräts führt zu einem zufälligen, noch nicht bewerteten Vortrag
+- Auf iOS-Geräten muss die Bewegungserkennung zuerst aktiviert werden
 
 ## Datenstruktur
 
