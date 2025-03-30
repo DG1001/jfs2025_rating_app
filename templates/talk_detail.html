@@ -94,7 +94,7 @@
                     
                     {% if speaker.companyWebUrl %}
                     <div>
-                        <a href="https://{{ speaker.companyWebUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ 'https://' + speaker.companyWebUrl if not speaker.companyWebUrl.startswith('http') else speaker.companyWebUrl }}" target="_blank" class="btn btn-sm btn-outline-primary">
                             <i class="bi bi-globe me-1"></i>{{ speaker.companyWebUrl }}
                         </a>
                     </div>
