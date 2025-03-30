@@ -40,21 +40,31 @@ def index():
     # Get filter parameters from request or session
     topic_filter = request.args.get('topic', session.get('topic_filter', ''))
     keyword_filter = request.args.get('keyword', session.get('keyword_filter', ''))
+    rated_filter = request.args.get('rated', session.get('rated_filter', ''))  # New filter
     
     # Store filters in session
     session['topic_filter'] = topic_filter
     session['keyword_filter'] = keyword_filter
+    session['rated_filter'] = rated_filter  # Store new filter
     
     # Filter talks based on parameters
     filtered_talks = talks
+    if rated_filter == 'yes' and current_user.is_authenticated:
+        filtered_talks = Talk.get_rated_by_user(current_user.id)
+    elif rated_filter == 'no' and current_user.is_authenticated:
+        filtered_talks = {k: v for k, v in talks.items() if k not in user_ratings}
+    
     if topic_filter:
-        filtered_talks = Talk.get_by_topic(topic_filter)
+        filtered_talks = {k: v for k, v in filtered_talks.items() if v.get('topicId') == topic_filter}
     
     if keyword_filter:
         filtered_talks = Talk.search(keyword_filter)
         if topic_filter:
-            # If both filters are active, apply both
             filtered_talks = {k: v for k, v in filtered_talks.items() if v.get('topicId') == topic_filter}
+        if rated_filter == 'yes' and current_user.is_authenticated:
+            filtered_talks = {k: v for k, v in filtered_talks.items() if k in user_ratings}
+        elif rated_filter == 'no' and current_user.is_authenticated:
+            filtered_talks = {k: v for k, v in filtered_talks.items() if k not in user_ratings}
     
     return render_template('index.html', 
                         talks=filtered_talks, 
@@ -64,7 +74,8 @@ def index():
                         total_talks=len(talks),
                         filtered_count=len(filtered_talks),
                         current_topic=session['topic_filter'],
-                        current_keyword=session['keyword_filter'])
+                        current_keyword=session['keyword_filter'],
+                        current_rated=session['rated_filter'])  # Pass new filter state
 
 @main.route('/talk/<talk_id>')
 @login_required

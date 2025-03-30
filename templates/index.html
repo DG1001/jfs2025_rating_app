@@ -10,7 +10,7 @@
     <div class="card shadow mb-4">
         <div class="card-body">
             <form id="filter-form" method="GET" action="{{ url_for('main.index') }}" class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="topic-filter" class="form-label">Nach Topic filtern</label>
                     <select class="form-select" id="topic-filter" name="topic">
                         <option value="">Alle Topics</option>
@@ -21,7 +21,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <label for="keyword-search" class="form-label">Suche nach Keywords bzw. im Abstract</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="keyword-search" name="keyword" 
@@ -30,6 +30,14 @@
                             <i class="bi bi-search"></i>
                         </button>
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <label for="rated-filter" class="form-label">Bewertungsstatus</label>
+                    <select class="form-select" id="rated-filter" name="rated">
+                        <option value="" {% if not current_rated %}selected{% endif %}>Alle Vorträge</option>
+                        <option value="yes" {% if current_rated == 'yes' %}selected{% endif %}>Nur bewertete</option>
+                        <option value="no" {% if current_rated == 'no' %}selected{% endif %}>Nur unbewertete</option>
+                    </select>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <a href="{{ url_for('main.index') }}?topic=&keyword=" class="btn btn-outline-secondary w-100">
@@ -53,6 +61,11 @@
                     {% endif %}
                     {% if current_keyword %}
                     <span class="badge bg-info text-dark">Suche: {{ current_keyword }}</span>
+                    {% endif %}
+                    {% if current_rated == 'yes' %}
+                    <span class="badge bg-success">Nur bewertete</span>
+                    {% elif current_rated == 'no' %}
+                    <span class="badge bg-warning text-dark">Nur unbewertete</span>
                     {% endif %}
                 </div>
             </div>

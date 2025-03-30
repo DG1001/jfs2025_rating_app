@@ -117,6 +117,13 @@ class Talk(JSONStorageModel):
         
         return counts
 
+    @classmethod
+    def get_rated_by_user(cls, user_id):
+        """Get all talks rated by a specific user."""
+        talks = cls.load_all()
+        ratings = Rating.get_for_user(user_id)
+        return {talk_id: talk for talk_id, talk in talks.items() if talk_id in ratings}
+
 
 class Speaker(JSONStorageModel):
     """Model for conference speakers."""
