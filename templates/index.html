@@ -126,7 +126,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Get the filter elements
         const topicFilter = document.getElementById('topic-filter');
-        const keywordSearch = document.getElementById('keyword-search');
         const ratedFilter = document.getElementById('rated-filter');
         const filterForm = document.getElementById('filter-form');
 
@@ -135,13 +134,8 @@
             filterForm.submit();
         }
 
-        // Add event listeners for immediate submission
+        // Add event listeners for immediate submission on dropdown changes
         topicFilter.addEventListener('change', submitForm);
-        keywordSearch.addEventListener('input', function() {
-            // Optional: Add a small delay to avoid submitting on every keystroke
-            clearTimeout(this.timeout);
-            this.timeout = setTimeout(submitForm, 300);
-        });
         ratedFilter.addEventListener('change', submitForm);
     });
 </script>
