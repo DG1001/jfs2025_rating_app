@@ -16,12 +16,18 @@ def setup_logging():
     rating_logger = logging.getLogger('rating_logger')
     rating_logger.setLevel(logging.INFO)
     
-    # Check if handler already exists to avoid duplicate handlers
-    if not rating_logger.handlers:
-        rating_handler = logging.FileHandler(current_app.config['RATING_LOG_FILE'])
-        formatter = logging.Formatter('%(asctime)s - %(message)s')
-        rating_handler.setFormatter(formatter)
-        rating_logger.addHandler(rating_handler)
+    # Remove any existing handlers to avoid duplicates
+    for handler in rating_logger.handlers[:]:
+        rating_logger.removeHandler(handler)
+    
+    # Add file handler
+    rating_handler = logging.FileHandler(current_app.config['RATING_LOG_FILE'])
+    formatter = logging.Formatter('%(asctime)s - %(message)s')
+    rating_handler.setFormatter(formatter)
+    rating_logger.addHandler(rating_handler)
+    
+    # Ensure propagation is enabled
+    rating_logger.propagate = True
 
 def log_rating(user_id, talk_id, rating, old_rating=None):
     """Log a rating action."""

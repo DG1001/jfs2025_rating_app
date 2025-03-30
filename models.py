@@ -335,11 +335,8 @@ class Rating(JSONStorageModel):
             return False, "Fehler beim Speichern der Bewertung."
         
         # Log the rating action
-        rating_logger = logging.getLogger('rating_logger')
-        if old_rating:
-            rating_logger.info(f'User {user_id} changed rating for talk {talk_id} from {old_rating} to {rating_value}')
-        else:
-            rating_logger.info(f'User {user_id} rated talk {talk_id} with {rating_value}')
+        from utils import log_rating
+        log_rating(user_id, talk_id, rating_value, old_rating)
         
         return True, None
     
