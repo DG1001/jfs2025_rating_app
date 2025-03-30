@@ -173,6 +173,34 @@ def recover_ratings():
         
     return redirect(url_for('admin.dashboard'))
 
+@main.route('/random-talk')
+@login_required
+def random_talk():
+    """Get a random unrated talk."""
+    # Get all talks
+    talks = Talk.get_all()
+    
+    # Get user's ratings
+    user_ratings = Rating.get_for_user(current_user.id)
+    
+    # Filter out talks that the user has already rated
+    unrated_talks = {talk_id: talk for talk_id, talk in talks.items() 
+                    if talk_id not in user_ratings}
+    
+    # If all talks are rated, just return any random talk
+    if not unrated_talks:
+        unrated_talks = talks
+    
+    # Select a random talk
+    import random
+    if unrated_talks:
+        random_talk_id = random.choice(list(unrated_talks.keys()))
+        return redirect(url_for('main.talk_detail', talk_id=random_talk_id))
+    
+    # If no talks found
+    flash('Keine Vorträge gefunden.', 'warning')
+    return redirect(url_for('main.index'))
+
 def init_app(app):
     """Initialize the main blueprint with the app."""
     # Setup logging

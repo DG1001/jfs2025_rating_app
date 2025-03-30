@@ -101,6 +101,58 @@
                     }
                 });
             }
+            
+            // Shake detection for mobile devices
+            if (window.DeviceMotionEvent) {
+                let shakeThreshold = 15; // Threshold for shake detection
+                let lastX = null, lastY = null, lastZ = null;
+                let moveCounter = 0;
+                let lastShake = 0;
+                
+                window.addEventListener('devicemotion', function(e) {
+                    let current = Date.now();
+                    if ((current - lastShake) < 1000) { // Prevent multiple triggers
+                        return;
+                    }
+                    
+                    let acceleration = e.accelerationIncludingGravity;
+                    if (!acceleration) return;
+                    
+                    let curX = acceleration.x;
+                    let curY = acceleration.y;
+                    let curZ = acceleration.z;
+                    
+                    if (lastX === null && lastY === null && lastZ === null) {
+                        lastX = curX;
+                        lastY = curY;
+                        lastZ = curZ;
+                        return;
+                    }
+                    
+                    let deltaX = Math.abs(lastX - curX);
+                    let deltaY = Math.abs(lastY - curY);
+                    let deltaZ = Math.abs(lastZ - curZ);
+                    
+                    if (((deltaX > shakeThreshold) && (deltaY > shakeThreshold)) || 
+                        ((deltaX > shakeThreshold) && (deltaZ > shakeThreshold)) || 
+                        ((deltaY > shakeThreshold) && (deltaZ > shakeThreshold))) {
+                        
+                        moveCounter++;
+                        
+                        if (moveCounter > 2) { // Require multiple movements to confirm shake
+                            lastShake = current;
+                            moveCounter = 0;
+                            
+                            // Navigate to random talk
+                            window.location.href = "{{ url_for('main.random_talk') }}";
+                        }
+                    }
+                    
+                    lastX = curX;
+                    lastY = curY;
+                    lastZ = curZ;
+                });
+            }
         });
     </script>
     {% endblock %}
