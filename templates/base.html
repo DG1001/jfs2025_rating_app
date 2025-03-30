@@ -72,8 +72,18 @@
     </div>
 
     <footer class="footer mt-5 py-3 bg-light">
-        <div class="container text-center">
-            <span class="text-muted">Java Forum Stuttgart 2025 - Bewertungsapp - Powered by AI and <a href="https://meiluft.de">MeiLuft</a></span>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <span class="text-muted">Java Forum Stuttgart 2025 - Bewertungsapp - Powered by AI and <a href="https://meiluft.de">MeiLuft</a></span>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <small class="text-muted">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Datenschutz</a> | 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#licenseModal">Lizenz</a>
+                    </small>
+                </div>
+            </div>
         </div>
     </footer>
 
@@ -81,6 +91,75 @@
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     
     {% block modals %}{% endblock %}
+    
+    <!-- Privacy Modal -->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="privacyModalLabel">Datenschutzhinweis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Datenerhebung und -verwendung</h6>
+                    <p>Diese Anwendung dient ausschließlich zur Bewertung von Vorträgen für das Java Forum Stuttgart 2025. Alle erhobenen Daten werden nur für diesen Zweck verwendet und nicht an Dritte weitergegeben.</p>
+                    
+                    <h6>Gespeicherte Daten</h6>
+                    <p>Folgende Daten werden in dieser Anwendung gespeichert:</p>
+                    <ul>
+                        <li>Name und E-Mail-Adresse (für die Benutzerauthentifizierung)</li>
+                        <li>Bewertungen und Kommentare zu Vorträgen</li>
+                        <li>Zugriffstoken für die Anmeldung</li>
+                    </ul>
+                    
+                    <h6>Datenspeicherung</h6>
+                    <p>Alle Daten werden lokal in JSON-Dateien gespeichert und nicht an externe Server übermittelt.</p>
+                    
+                    <h6>Cookies und Sitzungen</h6>
+                    <p>Diese Anwendung verwendet Cookies und Sitzungsdaten, um die Benutzerauthentifizierung zu ermöglichen.</p>
+                    
+                    <h6>Kontakt</h6>
+                    <p>Bei Fragen zum Datenschutz wenden Sie sich bitte an die Organisatoren des Java Forum Stuttgart.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- License Modal -->
+    <div class="modal fade" id="licenseModal" tabindex="-1" aria-labelledby="licenseModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="licenseModalLabel">Lizenzinformationen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>MIT Lizenz</h6>
+                    <p>Copyright (c) 2025 Java Forum Stuttgart</p>
+                    
+                    <p>Hiermit wird unentgeltlich jeder Person, die eine Kopie dieser Software und der zugehörigen Dokumentationen (die "Software") erhält, die Erlaubnis erteilt, sie uneingeschränkt zu nutzen, inklusive und ohne Ausnahme mit dem Recht, sie zu verwenden, zu kopieren, zu verändern, zusammenzuführen, zu veröffentlichen, zu verbreiten, zu unterlizenzieren und/oder zu verkaufen, und Personen, denen diese Software überlassen wird, diese Rechte zu verschaffen, unter den folgenden Bedingungen:</p>
+                    
+                    <p>Der obige Urheberrechtsvermerk und dieser Erlaubnisvermerk sind in allen Kopien oder Teilkopien der Software beizulegen.</p>
+                    
+                    <p>DIE SOFTWARE WIRD OHNE JEDE AUSDRÜCKLICHE ODER IMPLIZIERTE GARANTIE BEREITGESTELLT, EINSCHLIESSLICH DER GARANTIE ZUR BENUTZUNG FÜR DEN VORGESEHENEN ODER EINEM BESTIMMTEN ZWECK SOWIE JEGLICHER RECHTSVERLETZUNG, JEDOCH NICHT DARAUF BESCHRÄNKT. IN KEINEM FALL SIND DIE AUTOREN ODER COPYRIGHTINHABER FÜR JEGLICHEN SCHADEN ODER SONSTIGE ANSPRÜCHE HAFTBAR ZU MACHEN, OB INFOLGE DER ERFÜLLUNG EINES VERTRAGES, EINES DELIKTES ODER ANDERS IM ZUSAMMENHANG MIT DER SOFTWARE ODER SONSTIGER VERWENDUNG DER SOFTWARE ENTSTANDEN.</p>
+                    
+                    <h6>Verwendete Bibliotheken</h6>
+                    <ul>
+                        <li>Flask - BSD Lizenz</li>
+                        <li>Flask-Login - MIT Lizenz</li>
+                        <li>Bootstrap 5 - MIT Lizenz</li>
+                        <li>Bootstrap Icons - MIT Lizenz</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% block scripts %}
     <script>
         // Character counter for comment field

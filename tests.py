@@ -228,6 +228,15 @@ class TestJFSRatingApp(unittest.TestCase):
         response = self.client.get('/admin-login')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Administrator Login', response.data)
+    
+    def test_privacy_and_license_links(self):
+        """Test that privacy and license links are present in the base template."""
+        response = self.client.get('/login')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Datenschutz', response.data)
+        self.assertIn(b'Lizenz', response.data)
+        self.assertIn(b'data-bs-target="#privacyModal"', response.data)
+        self.assertIn(b'data-bs-target="#licenseModal"', response.data)
 
 if __name__ == '__main__':
     unittest.main()
