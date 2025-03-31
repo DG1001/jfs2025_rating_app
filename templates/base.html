@@ -57,6 +57,36 @@
     </nav>
 
     <div class="container" style="margin-top: 5rem;">
+        {% if session.get('show_info_box') %}
+        <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="infoModalLabel">Willkommen!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ session['show_info_box'] | safe }}
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST" action="{{ url_for('auth.dismiss_info') }}">
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var infoModal = new bootstrap.Modal(document.getElementById('infoModal'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                infoModal.show();
+            });
+        </script>
+        {% endif %}
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}

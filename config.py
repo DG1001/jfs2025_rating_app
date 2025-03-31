@@ -33,6 +33,7 @@ class Config:
     
     # Application settings
     MAX_RATING = 5  # Maximum rating value (5 stars)
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     
     @staticmethod
     def init_app(app):

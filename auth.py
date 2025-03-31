@@ -5,6 +5,7 @@ import secrets
 import time
 import os
 import json
+import markdown
 from models import User
 
 auth = Blueprint('auth', __name__)
@@ -27,6 +28,15 @@ def login():
         user = User.get_by_token(token.strip())
         if user:
             login_user(user)
+            # Check if this is the user's first login
+            if 'first_login' not in session:
+                try:
+                    with open(os.path.join(current_app.config['BASE_DIR'], 'user_info.md'), 'r', encoding='utf-8') as f:
+                        info_text = markdown.markdown(f.read())
+                    session['show_info_box'] = info_text
+                    session['first_login'] = False  # Mark as seen
+                except FileNotFoundError:
+                    flash('Info-Text konnte nicht geladen werden.', 'warning')
             flash(f'Willkommen, {user.name}!', 'success')
             return redirect(url_for('main.index'))
         flash('Ungültiges Access-Token.', 'danger')
@@ -43,6 +53,15 @@ def login():
         user = User.get_by_token(token)
         if user:
             login_user(user)
+            # Check if this is the user's first login
+            if 'first_login' not in session:
+                try:
+                    with open(os.path.join(current_app.config['BASE_DIR'], 'user_info.md'), 'r', encoding='utf-8') as f:
+                        info_text = markdown.markdown(f.read())
+                    session['show_info_box'] = info_text
+                    session['first_login'] = False  # Mark as seen
+                except FileNotFoundError:
+                    flash('Info-Text konnte nicht geladen werden.', 'warning')
             flash(f'Willkommen, {user.name}!', 'success')
             return redirect(url_for('main.index'))
         
@@ -119,6 +138,13 @@ def admin_login():
         flash('Ungültiger Benutzername oder Passwort.', 'danger')
     
     return render_template('auth/admin_login.html')
+
+@auth.route('/dismiss-info', methods=['POST'])
+@login_required
+def dismiss_info():
+    """Dismiss the info box and clear it from the session."""
+    session.pop('show_info_box', None)
+    return redirect(request.referrer or url_for('main.index'))
 
 @auth.route('/logout')
 @login_required
