@@ -22,7 +22,7 @@ class JSONStorageModel:
             if not os.path.exists(file_path):
                 return {}
             
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
                 return json.load(f)
         except Exception as e:
             logging.error(f"Error loading data from {file_path}: {str(e)}")
