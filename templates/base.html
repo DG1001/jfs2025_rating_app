@@ -57,7 +57,7 @@
     </nav>
 
     <div class="container" style="margin-top: 5rem;">
-        {% if session.get('show_info_box') %}
+        <!-- Info Modal - Always available but only auto-shown on first login -->
         <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
@@ -66,17 +66,27 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        {{ session['show_info_box'] | safe }}
+                        {% if session.get('show_info_box') %}
+                            {{ session['show_info_box'] | safe }}
+                        {% else %}
+                            <!-- Load info text directly if not in session -->
+                            {% include 'info_content.html' ignore missing %}
+                        {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <form method="POST" action="{{ url_for('auth.dismiss_info') }}">
-                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                        </form>
+                        {% if session.get('show_info_box') %}
+                            <form method="POST" action="{{ url_for('auth.dismiss_info') }}">
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                            </form>
+                        {% else %}
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Schließen</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
+        {% if session.get('show_info_box') %}
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 var infoModal = new bootstrap.Modal(document.getElementById('infoModal'), {
@@ -109,6 +119,9 @@
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <small class="text-muted">
+                        {% if current_user.is_authenticated %}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#infoModal">Info</a> | 
+                        {% endif %}
                         <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Datenschutz</a> | 
                         <a href="#" data-bs-toggle="modal" data-bs-target="#licenseModal">Lizenz</a>
                     </small>

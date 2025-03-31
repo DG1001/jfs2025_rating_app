@@ -36,7 +36,14 @@ def login():
                     session['show_info_box'] = info_text
                     session['first_login'] = False  # Mark as seen
                 except FileNotFoundError:
-                    flash('Info-Text konnte nicht geladen werden.', 'warning')
+                    # Try to use the template instead
+                    from flask import render_template_string
+                    try:
+                        info_text = render_template_string("{% include 'info_content.html' %}")
+                        session['show_info_box'] = info_text
+                        session['first_login'] = False
+                    except:
+                        flash('Info-Text konnte nicht geladen werden.', 'warning')
             flash(f'Willkommen, {user.name}!', 'success')
             return redirect(url_for('main.index'))
         flash('Ungültiges Access-Token.', 'danger')
@@ -61,7 +68,14 @@ def login():
                     session['show_info_box'] = info_text
                     session['first_login'] = False  # Mark as seen
                 except FileNotFoundError:
-                    flash('Info-Text konnte nicht geladen werden.', 'warning')
+                    # Try to use the template instead
+                    from flask import render_template_string
+                    try:
+                        info_text = render_template_string("{% include 'info_content.html' %}")
+                        session['show_info_box'] = info_text
+                        session['first_login'] = False
+                    except:
+                        flash('Info-Text konnte nicht geladen werden.', 'warning')
             flash(f'Willkommen, {user.name}!', 'success')
             return redirect(url_for('main.index'))
         
