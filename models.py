@@ -22,7 +22,7 @@ class JSONStorageModel:
             if not os.path.exists(file_path):
                 return {}
             
-            with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 return json.load(f)
         except Exception as e:
             logging.error(f"Error loading data from {file_path}: {str(e)}")
@@ -35,8 +35,8 @@ class JSONStorageModel:
             file_path = cls.get_file_path()
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             
-            with open(file_path, 'w') as f:
-                json.dump(data, f, indent=4)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
             return True
         except Exception as e:
             logging.error(f"Error saving data to {file_path}: {str(e)}")
