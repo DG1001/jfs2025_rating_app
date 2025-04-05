@@ -1,20 +1,26 @@
+
 <h3>Willkommen zur JFS 2025 Bewertungsapp!</h3>
 
 <p>Diese Anwendung ermöglicht es Ihnen, Vorträge für das Java Forum Stuttgart 2025 zu bewerten und zu kommentieren.</p>
 
-<h4>Funktionen:</h4>
+<p>Die 'JFS Bewertungsapp' ist aus einem Experiment zur möglichst günstigen/kostenlosen Softwareentwicklung + Deployment mit KI entstanden. Anfangs war nicht geplant, diese App zur eigentlichen Bewertung einzusetzen. Die App ist mit Python und Flask implementiert und verwendet json Dateien zur Ablage der Daten. Sie läuft auf einer kostenneutralen Compute Engine (VM) der Google Cloud. Die Namensauflösung jfs.meiluft.duckdns.org erfolgt hierbei über einen kostenfreien dyn. DNS-Dienst, das Zertifikat stammt von Let’s Encrypt.</p>
+
+<p>Der Code ist hier zu finden: <a href="https://github.com/DG1001/jfs2025_rating_app">https://github.com/DG1001/jfs2025_rating_app</a></p>
+
+<h4>Zur Bedienung:</h4>
 <ul>
-    <li><strong>Vorträge durchsuchen</strong> - Filtern Sie nach Themen oder suchen Sie nach Stichwörtern</li>
-    <li><strong>Bewertungen abgeben</strong> - Bewerten Sie Vorträge mit 1-5 Sternen</li>
-    <li><strong>Kommentare hinterlassen</strong> - Teilen Sie Ihre Meinung zu den Vorträgen</li>
-    <li><strong>Zufälligen Vortrag anzeigen</strong> - Entdecken Sie neue Vorträge durch Zufall</li>
+    <li>Auf der Übersichtsseite kann man nach Topic und Keyword (aus den Keywords des Talks und Text im Abstract) filtern.</li>
+    <li>Ebenso ist ein Filtern nach Bewertungsstatus möglich um bereits bewertete Vorträge auszublenden.</li>
+    <li>Die Talks werden per Klick auf 'Detail' geöffnet, hier ist die Bewertung mit dem Klick auf 1-5 Sterne (1=schlecht, 5=toll) möglich.</li>
+    <li>Die Bewertung kann beliebig oft angepasst werden.</li>
+    <li>Nach Abgabe einer Bewertung erscheint die Bewertung anderer Benutzer (falls bereits vorhanden).</li>
+    <li>Kommentare dienen als Hinweis für andere Bewerter. Diese erscheinen für alle Bewerter sichtbar mit Ihrem Namen. Sie können beliebig viele Kommentare zu einem Talk eingeben (jeweils 200 Zeichen)</li>
 </ul>
 
-<h4>Tipps:</h4>
-<ul>
-    <li>Auf Mobilgeräten können Sie das Gerät schütteln, um zu einem zufälligen Vortrag zu gelangen</li>
-    <li>Nutzen Sie die Filter, um schnell interessante Vorträge zu finden</li>
-    <li>Ihre Bewertungen helfen uns bei der Auswahl der besten Vorträge für das Event</li>
-</ul>
+<p>Bitte beachten Sie, dass nach Bewertungsschluss noch weitere Faktoren in die Auswahl der Talks einfließen, wie z.B.: es wird nur ein Talk eines Sprecher ins Programm genommen.</p>
+
+<p>Wir möchten darauf hinweisen, dass Ihre Bewertung für alle anderen Bewerter sichtbar ist und Ihren vollständigen Namen enthält. Die Bewertungen sowie Ihr Name und Ihre E-Mail-Adresse werden während des Bewertungszeitraums auf dem Server, auf dem die Applikation installiert ist, gespeichert. Diese Daten werden nicht an Dritte weitergegeben, sondern ausschließlich zum Zwecke der Bewertung verwendet. Bitte auch die Hinweise zum Datenschutz im Footer der App beachten.</p>
+
+<p>Mit der Teilnahme an der Bewertung stimmen Sie diesen Bedingungen zu.</p>
 
 <p>Vielen Dank für Ihre Unterstützung bei der Gestaltung des Java Forum Stuttgart 2025!</p>
