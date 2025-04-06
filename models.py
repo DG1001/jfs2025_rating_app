@@ -404,8 +404,8 @@ class Comment(JSONStorageModel):
             return False, "Bitte geben Sie einen Kommentar ein."
             
         # Check comment length
-        if len(text) > 200:
-            return False, "Kommentar darf maximal 200 Zeichen lang sein."
+        if len(text) > 600:
+            return False, "Kommentar darf maximal 600 Zeichen lang sein."
         
         comments = cls.load_all()
         
