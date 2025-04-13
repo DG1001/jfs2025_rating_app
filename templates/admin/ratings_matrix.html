@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block page_title %}Ratings Matrix{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Ratings Overview</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
+                <table class="table table-bordered table-hover">
+                    <thead class="sticky-top bg-light">
+                        <tr>
+                            <th class="align-middle">ID</th>
+                            <th class="align-middle">Title</th>
+                            <th class="align-middle">Speaker</th>
+                            {% for user_id, user in users.items() %}
+                            <th class="text-center" style="min-width: 60px;">
+                                <div class="d-flex flex-column align-items-center">
+                                    <small>{{ user.name }}</small>
+                                    <small class="text-muted">{{ user.email }}</small>
+                                </div>
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for talk in talks %}
+                        <tr>
+                            <td class="align-middle">{{ talk.id }}</td>
+                            <td class="align-middle">{{ talk.title }}</td>
+                            <td class="align-middle">{{ talk.speaker }}</td>
+                            {% for user_id, user in users.items() %}
+                            <td class="text-center align-middle">
+                                {% if talk.ratings[user_id] %}
+                                <span class="badge bg-primary rounded-pill" 
+                                      style="width: 30px; height: 30px; line-height: 30px; font-size: 1em;">
+                                    {{ talk.ratings[user_id] }}
+                                </span>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    .table thead th {
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
