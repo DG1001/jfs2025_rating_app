@@ -116,8 +116,6 @@ temp/
 *.bak
 *.swp
 
-# Data files that should not be tracked
-data/
 
 instance/
 .aider*

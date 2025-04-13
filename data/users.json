@@ -1,0 +1,43 @@
+{
+    "user_1743420755_2": {
+        "name": "Max Mustermann",
+        "email": "anonymous@example.com",
+        "token": "7dff79c9f6da7b9633e3d133aa173d9f",
+        "created_at": "2025-03-31T11:32:35.560972"
+    },
+    "user_1743420897_3": {
+        "name": "Erika Musterfrau",
+        "email": "anonymous@example.com",
+        "token": "faf8ab107531851795ded8e134bd8718",
+        "created_at": "2025-03-31T11:34:57.489600"
+    },
+    "user_1743421123_4": {
+        "name": "Hans M\u00fcller",
+        "email": "anonymous@example.com",
+        "token": "83b2f9005d1c4c9e8a4a78c9e5f85d2b",
+        "created_at": "2025-03-31T12:02:15.123456"
+    },
+    "user_1743421345_5": {
+        "name": "Sabine Schneider",
+        "email": "anonymous@example.com",
+        "token": "a49c670b3d594a2fa3f5ed0c9f71c2e7",
+        "created_at": "2025-03-31T12:15:43.789012"
+    },
+    "user_1743421567_6": {
+        "name": "Peter Fischer",
+        "email": "anonymous@example.com",
+        "token": "d57d8e1f902d4a7a83c8e5f0b5e2f9c3",
+        "created_at": "2025-03-31T12:45:21.456789"
+    },
+    "user_1743421789_7": {
+        "name": "Laura Hoffmann",
+        "email": "anonymous@example.com",
+        "token": "e6c12b4f8dca4f3b91a5b0ec7f12a3d4",
+        "created_at": "2025-03-31T13:05:12.987654"
+    },
+    "admin": {
+        "name": "Administrator",
+        "email": "admin@example.com",
+        "token": "admin-token"
+    }
+}
