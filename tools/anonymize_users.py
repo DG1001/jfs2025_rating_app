@@ -26,10 +26,9 @@ def anonymize_user_data(filepath):
         if user_id == 'admin':
             continue
             
-        # Anonymize email while preserving the domain for identification
+        # Fully anonymize email (remove domain too)
         if 'email' in user_info:
-            username, domain = user_info['email'].split('@')
-            user_info['email'] = f"anonymous@{domain}"
+            user_info['email'] = "anonymous@example.com"
 
     return json.dumps(data, indent=4, ensure_ascii=False)
 
