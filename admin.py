@@ -212,6 +212,55 @@ def delete_user(user_id):
     flash(f'Benutzer {user_name} erfolgreich gelöscht.', 'success')
     return redirect(url_for('admin.manage_users'))
 
+@admin.route('/ratings-matrix')
+def ratings_matrix():
+    """Show matrix of all ratings with talks as rows and users as columns."""
+    # Load all data
+    talks = {}
+    users = {}
+    speakers = {}
+    ratings = {}
+    
+    try:
+        with open(current_app.config['TALKS_FILE'], 'r') as f:
+            talks = json.load(f)
+        with open(current_app.config['USERS_FILE'], 'r') as f:
+            users = json.load(f)
+        with open(current_app.config['SPEAKERS_FILE'], 'r') as f:
+            speakers = json.load(f)
+        with open(current_app.config['RATINGS_FILE'], 'r') as f:
+            ratings = json.load(f)
+    except Exception as e:
+        flash(f'Error loading data: {str(e)}', 'danger')
+        return redirect(url_for('admin.dashboard'))
+
+    # Prepare talk data with speaker names
+    talk_data = []
+    for talk_id, talk in talks.items():
+        speaker_name = ""
+        if 'speakerId' in talk and talk['speakerId']:
+            speaker = speakers.get(str(talk['speakerId']))
+            if speaker:
+                speaker_name = f"{speaker.get('firstName', '')} {speaker.get('surName', '')}"
+        
+        talk_data.append({
+            'id': talk_id,
+            'title': talk.get('title', ''),
+            'speaker': speaker_name,
+            'ratings': {}
+        })
+
+    # Add ratings for each user
+    for user_id in users:
+        user_ratings = ratings.get(user_id, {})
+        for talk in talk_data:
+            talk['ratings'][user_id] = user_ratings.get(talk['id'])
+
+    return render_template('admin/ratings_matrix.html',
+                         talks=talk_data,
+                         users=users,
+                         max_rating=current_app.config['MAX_RATING'])
+
 @admin.route('/export-ratings')
 def export_ratings():
     """Export ratings as CSV file."""
