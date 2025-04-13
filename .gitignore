@@ -116,6 +116,10 @@ temp/
 *.bak
 *.swp
 
-
+data/comments.json
+data/ratings.json
+data/speakers.json
+data/talks.json
+data/users.json
 instance/
 .aider*
